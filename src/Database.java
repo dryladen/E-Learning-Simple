@@ -37,13 +37,13 @@ public class Database {
     public ArrayList<Kelas> getDataKelas() {
         ArrayList<Kelas> kelas = new ArrayList<>();
         try {
-            sql = "SELECT * FROM Kelas;";
+            sql = "SELECT Kelas.id, Kelas.nama, Kelas.kode,Akun.id as id_pengajar, Akun.nama as pengajar FROM Kelas INNER JOIN Akun ON Kelas.id_pengajar = Akun.id";
             Connection cn = getKoneksi();
             pst = cn.prepareStatement(sql);
             result = pst.executeQuery();
             while (result.next()) {
                 kelas.add(new Kelas(result.getInt(1), result.getString(2), result.getString(3),
-                        result.getString(4)));
+                        result.getString(4), result.getString(5)));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error : " + ex);
@@ -58,17 +58,18 @@ public class Database {
         return kelas;
     }
 
-    public ArrayList<Kelas> getDataKelas(int id) {
+    // Overloading
+    public ArrayList<Kelas> getDataKelas(String id) {
         ArrayList<Kelas> kelas = new ArrayList<>();
         try {
-            sql = "SELECT Kelas.id, Kelas.nama, Kelas.kode, Akun.nama as pengajar FROM ((Kelas_Akun INNER JOIN Kelas ON Kelas_Akun.id_kelas = Kelas.id) INNER JOIN Akun ON Kelas_Akun.id_pengajar = Akun.id) WHERE Kelas_Akun.id_user = ?;";
+            sql = "SELECT Kelas.id, Kelas.nama, Kelas.kode,Akun.id as id_pengajar, Akun.nama as pengajar FROM ((Kelas INNER JOIN Akun ON Kelas.id_pengajar = Akun.id) INNER JOIN Kelas_Akun ON Kelas_Akun.id_kelas = Kelas.id) WHERE Kelas_Akun.id_user = ?";
             Connection cn = getKoneksi();
             pst = cn.prepareStatement(sql);
-            pst.setInt(1, id);
+            pst.setString(1, id);
             result = pst.executeQuery();
             while (result.next()) {
                 kelas.add(new Kelas(result.getInt(1), result.getString(2), result.getString(3),
-                        result.getString(4)));
+                        result.getString(4), result.getString(5)));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error : " + ex);
@@ -83,14 +84,27 @@ public class Database {
         return kelas;
     }
 
-    public void joinKelas(int id_user, int id_kelas, int id_pengajar) {
+    public void joinKelas(String id_user, int id_kelas) {
         try {
-            sql = "INSERT INTO Kelas_Akun (id_user,id_kelas,id_pengajar) VALUES (?,?,?);";
+            sql = "INSERT INTO Kelas_Akun (id_user,id_kelas) VALUES (?,?)";
             Connection cn = getKoneksi();
             pst = cn.prepareStatement(sql);
-            pst.setInt(1, id_user);
+            pst.setString(1, id_user);
             pst.setInt(2, id_kelas);
-            pst.setInt(3, id_pengajar);
+            pst.execute();
+            pst.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+
+    public void keluarKelas(String id_user, int id_kelas) {
+        try {
+            sql = "DELETE FROM Kelas_Akun WHERE id_user = ? AND id_kelas = ?";
+            Connection cn = getKoneksi();
+            pst = cn.prepareStatement(sql);
+            pst.setString(1, id_user);
+            pst.setInt(2, id_kelas);
             pst.execute();
             pst.close();
         } catch (SQLException ex) {
@@ -100,7 +114,7 @@ public class Database {
 
     public void updateKelas(Kelas Kelas) {
         try {
-            sql = "UPDATE Kelas SET nama=?,price=?,amount=? WHERE id=?";
+            sql = "UPDATE Kelas SET nama=? WHERE id=?";
             Connection cn = getKoneksi();
             pst = cn.prepareStatement(sql);
             pst.execute();
@@ -136,11 +150,11 @@ public class Database {
             result = stm.executeQuery("SELECT * FROM Akun");
             while (result.next()) {
                 if (result.getInt(7) == 1) {
-                    akun.add(new Pengajar(result.getInt(1), result.getString(2), result.getString(3),
-                            result.getString(4), result.getString(5), result.getString(6), result.getInt(7)));
+                    akun.add(new Pengajar(result.getString(1), result.getString(2), result.getString(3),
+                            result.getString(4), result.getString(5), result.getString(6), result.getString(7)));
                 } else {
-                    akun.add(new Pelajar(result.getInt(1), result.getString(2), result.getString(3),
-                            result.getString(4), result.getString(5), result.getString(6), result.getInt(7)));
+                    akun.add(new Pelajar(result.getString(1), result.getString(2), result.getString(3),
+                            result.getString(4), result.getString(5), result.getString(6), result.getString(7)));
                 }
             }
         } catch (SQLException ex) {
