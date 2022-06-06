@@ -149,7 +149,6 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
 
     @Override
     public void keluarKelas() {
-        // TODO Auto-generated method stub
 
     }
 }
