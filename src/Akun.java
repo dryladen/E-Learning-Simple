@@ -3,19 +3,17 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public abstract class Akun {
-    protected int id;
-    protected String username, password, nama, jenisKelamin, alamat;
+    protected String id, username, password, nama, jenisKelamin, alamat, isPengajar;
     protected InputStreamReader prepare = new InputStreamReader(System.in);
     protected BufferedReader input = new BufferedReader(prepare);
     protected int pilihan;
     protected static int jumlah = 0;
-    protected int isPengajar = 0;
     protected ArrayList<Kelas> kelas;
     protected Database database;
 
     // Constructor
-    public Akun(int id, String username, String password, String nama, String jenisKelamin, String alamat,
-            int isPengajar) {
+    public Akun(String id, String username, String password, String nama, String jenisKelamin, String alamat,
+            String isPengajar) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -41,11 +39,11 @@ public abstract class Akun {
         System.out.println("=========================================================");
     }
 
-    public int isPengajar() {
+    public String isPengajar() {
         return isPengajar;
     }
 
-    public void setPengajar(int isPengajar) {
+    public void setPengajar(String isPengajar) {
         this.isPengajar = isPengajar;
     }
 
@@ -53,11 +51,11 @@ public abstract class Akun {
         return jumlah;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

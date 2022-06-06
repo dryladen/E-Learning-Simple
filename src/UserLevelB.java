@@ -1,7 +1,7 @@
 public interface UserLevelB {
     void joinKelas();
 
-    void lihatKelas();
+    void keluarKelas();
 
-    void menu();
+    void lihatKelas();
 }

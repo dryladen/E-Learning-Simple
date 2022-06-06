@@ -1,14 +1,12 @@
 public class Kelas {
     private int id;
+    private String nama, kode, id_pengajar, pengajar;
 
-    private String nama;
-    private String kode;
-    private String pengajar;
-
-    public Kelas(int id, String nama, String kode, String pengajar) {
+    public Kelas(int id, String nama, String kode, String id_pengajar, String pengajar) {
         this.id = id;
         this.nama = nama;
         this.kode = kode;
+        this.id_pengajar = id_pengajar;
         this.pengajar = pengajar;
     }
 
@@ -25,6 +23,14 @@ public class Kelas {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getId_pengajar() {
+        return id_pengajar;
+    }
+
+    public void setId_pengajar(String id_pengajar) {
+        this.id_pengajar = id_pengajar;
     }
 
     public String getNama() {

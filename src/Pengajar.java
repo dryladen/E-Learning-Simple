@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 public class Pengajar extends Akun implements UserLevelA, UserLevelB {
 
-    public Pengajar(int id, String username, String password, String nama, String jenisKelamin, String alamat,
-            int isPengajar) {
+    public Pengajar(String id, String username, String password, String nama, String jenisKelamin, String alamat,
+            String isPengajar) {
         super(id, username, password, nama, jenisKelamin, alamat, isPengajar);
     }
 
@@ -35,7 +35,7 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
             System.out.println("Masukan kode kelas : ");
             String kodeKelas = input.readLine();
             int id = this.kelas.get(kelas.size() - 1).getId();
-            this.kelas.add(new Kelas(id++, namaKelas, kodeKelas, this.getNama()));
+            this.kelas.add(new Kelas(id++, namaKelas, kodeKelas, this.id, this.getNama()));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -113,10 +113,12 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
             while (true) {
                 System.out.println("==========================");
                 System.out.println("1. Lihat Kelas");
-                System.out.println("2. Tambah Kelas");
+                System.out.println("2. Buat Kelas");
                 System.out.println("3. Hapus Kelas");
-                System.out.println("4. Profile");
-                System.out.println("5. Logout");
+                System.out.println("4. Ubah Kelas");
+                System.out.println("6. Join Kelas");
+                System.out.println("7. Profile");
+                System.out.println("8. Logout");
                 System.out.println("==========================");
                 System.out.println("Pilih menu: ");
                 pilihan = Integer.parseInt(input.readLine());
@@ -130,7 +132,7 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
                     case 3:
                         this.hapusKelas();
                         break;
-                    case 4:
+                    case 7:
                         this.profile();
                         break;
                     case 5:
@@ -142,6 +144,12 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+    }
+
+    @Override
+    public void keluarKelas() {
+        // TODO Auto-generated method stub
 
     }
 }
