@@ -5,7 +5,7 @@
 - sqlite-jdbc-3.34.0.jar (Already exist in files)
 
 ## Add sqlite library to project
-![table](image/table.JPG)
+![table](image/add_libraries.JPG)
 - Right Click on **Libraries** folder 
 - Click on **Add JAR/Folder** and select `sqlite-jdbc-3.34.0.jar`
 - Click open
