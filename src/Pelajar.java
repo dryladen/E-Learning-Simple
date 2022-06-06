@@ -25,7 +25,7 @@ public class Pelajar extends Akun implements UserLevelB {
             for (Kelas kelas : dataKelas) {
                 System.out.println(kelas.getKode() + ". " + kelas.getNama());
             }
-            System.out.println("Masukan kode kelas : ");
+            System.out.print("Masukan kode kelas : ");
             String kodeKelas = input.readLine();
             for (Kelas kelas : dataKelas) {
                 if (kelas.getKode().equals(kodeKelas)) {
@@ -42,6 +42,30 @@ public class Pelajar extends Akun implements UserLevelB {
                 }
             }
             System.out.println("Kelas tidak ditemukan");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    @Override
+    public void keluarKelas() {
+        try {
+            if (this.kelas.isEmpty()) {
+                System.out.println("Kelas kosong");
+            } else {
+                System.out.print("Masukan kode kelas : ");
+                String kodeKelas;
+                kodeKelas = input.readLine();
+                for (int i = 0; i < this.kelas.size(); i++) {
+                    if (this.kelas.get(i).getKode().equals(kodeKelas)) {
+                        database.keluarKelas(this.id, this.kelas.get(i).getId());
+                        this.kelas.remove(i);
+                        System.out.println("Kelas berhasil dihapus");
+                        return;
+                    }
+                }
+                System.out.println("Kelas tidak ditemukan");
+            }
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -67,10 +91,10 @@ public class Pelajar extends Akun implements UserLevelB {
                 System.out.println("1. Lihat Kelas");
                 System.out.println("2. Join  Kelas");
                 System.out.println("3. Keluar  Kelas");
-                System.out.println("3. Profile");
-                System.out.println("4. Logout");
+                System.out.println("4. Profile");
+                System.out.println("5. Logout");
                 System.out.println("==========================");
-                System.out.println("Pilih menu: ");
+                System.out.print("Pilih menu: ");
                 pilihan = Integer.parseInt(input.readLine());
                 switch (pilihan) {
                     case 1:
@@ -80,9 +104,12 @@ public class Pelajar extends Akun implements UserLevelB {
                         this.joinKelas();
                         break;
                     case 3:
-                        this.profile();
+                        this.keluarKelas();
                         break;
                     case 4:
+                        this.profile();
+                        break;
+                    case 5:
                         return;
                     default:
                         System.out.println("Pilihan tidak tersedia");
@@ -95,9 +122,4 @@ public class Pelajar extends Akun implements UserLevelB {
         }
     }
 
-    @Override
-    public void keluarKelas() {
-        // TODO Auto-generated method stub
-
-    }
 }
