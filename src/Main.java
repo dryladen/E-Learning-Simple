@@ -8,7 +8,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         InputStreamReader prepare = new InputStreamReader(System.in);
         BufferedReader input = new BufferedReader(prepare);
-        ArrayList<Akun> dataAkun = new ArrayList<Akun>();
+        Database database = new Database();
+        ArrayList<Akun> dataAkun = database.getDataAkun();
         int pilihan;
         while (true) {
             System.out.println("=================================");

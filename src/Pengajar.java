@@ -3,37 +3,18 @@ import java.util.ArrayList;
 
 public class Pengajar extends Akun implements UserLevelA, UserLevelB {
 
-    private String nip;
-
-    // Constructor
-    public Pengajar(String username, String password, String nama, String jenisKelamin, String alamat, String nip) {
-        super(username, password, nama, jenisKelamin, alamat);
-        this.nip = nip;
+    public Pengajar(int id, String username, String password, String nama, String jenisKelamin, String alamat,
+            int isPengajar) {
+        super(id, username, password, nama, jenisKelamin, alamat, isPengajar);
     }
 
     // Setter & Getter
-    public String getNip() {
-        return nip;
-    }
-
-    public void setNip(String nip) {
-        this.nip = nip;
-    }
-
     public ArrayList<Kelas> getKelas() {
         return kelas;
     }
 
     public void setKelas(ArrayList<Kelas> kelas) {
         this.kelas = kelas;
-    }
-
-    @Override
-    public void profile() {
-        System.out.println("=========================================================");
-        super.profile();
-        System.out.println("NIP           : " + this.nip);
-        System.out.println("=========================================================");
     }
 
     @Override
@@ -53,7 +34,8 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
             String namaKelas = input.readLine();
             System.out.println("Masukan kode kelas : ");
             String kodeKelas = input.readLine();
-            this.kelas.add(new Kelas(namaKelas, kodeKelas, this.nama));
+            int id = this.kelas.get(kelas.size() - 1).getId();
+            this.kelas.add(new Kelas(id++, namaKelas, kodeKelas, this.getNama()));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -94,7 +76,6 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
                 System.out.println("Kelas ke-" + kelas.indexOf(kelas2) + 1 + " : ");
                 System.out.println("Nama Kelas : " + kelas2.getNama());
                 System.out.println("Kode Kelas : " + kelas2.getKode());
-                System.out.println("Dosen      : " + kelas2.getDosen());
                 System.out.println("-------------------------------");
             }
         }

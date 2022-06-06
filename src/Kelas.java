@@ -1,20 +1,30 @@
 public class Kelas {
+    private int id;
+
     private String nama;
     private String kode;
-    private String dosen;
+    private String pengajar;
 
-    public Kelas(String nama, String kode, String dosen) {
+    public Kelas(int id, String nama, String kode, String pengajar) {
+        this.id = id;
         this.nama = nama;
         this.kode = kode;
-        this.dosen = dosen;
+        this.pengajar = pengajar;
     }
 
     public void displayKelas() {
-        System.out.println("=========================================================");
         System.out.println("Nama kelas : " + this.nama);
         System.out.println("Kode kelas : " + this.kode);
-        System.out.println("Dosen      : " + this.dosen);
+        System.out.println("Pengajar   : " + this.pengajar);
         System.out.println("=========================================================");
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNama() {
@@ -33,12 +43,12 @@ public class Kelas {
         this.kode = kode;
     }
 
-    public String getDosen() {
-        return dosen;
+    public String getPengajar() {
+        return pengajar;
     }
 
-    public void setDosen(String dosen) {
-        this.dosen = dosen;
+    public void setPengajar(String pengajar) {
+        this.pengajar = pengajar;
     }
 
 }
