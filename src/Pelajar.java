@@ -1,15 +1,11 @@
 import java.io.IOException;
 import java.util.ArrayList;
 
-/*
- *
- * @author Laden
- */
 public class Pelajar extends Akun implements UserLevelB {
 
     // Constructor
-    public Pelajar(int id, String username, String password, String nama, String jenisKelamin, String alamat,
-            int isPengajar) {
+    public Pelajar(String id, String username, String password, String nama, String jenisKelamin, String alamat,
+            String isPengajar) {
         super(id, username, password, nama, jenisKelamin, alamat, isPengajar);
     }
 
@@ -25,8 +21,27 @@ public class Pelajar extends Akun implements UserLevelB {
     @Override
     public void joinKelas() {
         try {
+            ArrayList<Kelas> dataKelas = database.getDataKelas();
+            for (Kelas kelas : dataKelas) {
+                System.out.println(kelas.getKode() + ". " + kelas.getNama());
+            }
             System.out.println("Masukan kode kelas : ");
-
+            String kodeKelas = input.readLine();
+            for (Kelas kelas : dataKelas) {
+                if (kelas.getKode().equals(kodeKelas)) {
+                    for (Kelas kelas2 : this.kelas) {
+                        if (kelas2.getKode().equals(kodeKelas)) {
+                            System.out.println("Anda sudah terdaftar di kelas ini");
+                            return;
+                        }
+                    }
+                    this.kelas.add(kelas);
+                    database.joinKelas(this.id, kelas.getId());
+                    System.out.println("Kelas berhasil ditambahkan");
+                    return;
+                }
+            }
+            System.out.println("Kelas tidak ditemukan");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -51,6 +66,7 @@ public class Pelajar extends Akun implements UserLevelB {
                 System.out.println("==========================");
                 System.out.println("1. Lihat Kelas");
                 System.out.println("2. Join  Kelas");
+                System.out.println("3. Keluar  Kelas");
                 System.out.println("3. Profile");
                 System.out.println("4. Logout");
                 System.out.println("==========================");
@@ -77,5 +93,11 @@ public class Pelajar extends Akun implements UserLevelB {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void keluarKelas() {
+        // TODO Auto-generated method stub
+
     }
 }
