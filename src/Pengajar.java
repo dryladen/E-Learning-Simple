@@ -8,20 +8,30 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
         super(id, username, password, nama, jenisKelamin, alamat, isPengajar);
     }
 
-    // Setter & Getter
-    public ArrayList<Kelas> getKelas() {
-        return kelas;
-    }
-
-    public void setKelas(ArrayList<Kelas> kelas) {
-        this.kelas = kelas;
-    }
-
     @Override
     public void joinKelas() {
         try {
-            System.out.println("Masukan kode kelas : ");
-
+            ArrayList<Kelas> dataKelas = database.getDataKelas();
+            for (Kelas kelas : dataKelas) {
+                System.out.println(kelas.getKode() + ". " + kelas.getNama());
+            }
+            System.out.print("Masukan kode kelas : ");
+            String kodeKelas = input.readLine();
+            for (Kelas kelas : dataKelas) {
+                if (kelas.getKode().equals(kodeKelas)) {
+                    for (Kelas kelas2 : this.kelas) {
+                        if (kelas2.getKode().equals(kodeKelas)) {
+                            System.out.println("Anda sudah terdaftar di kelas ini");
+                            return;
+                        }
+                    }
+                    this.kelas.add(kelas);
+                    database.joinKelas(this.id, kelas.getId());
+                    System.out.println("Kelas berhasil ditambahkan");
+                    return;
+                }
+            }
+            System.out.println("Kelas tidak ditemukan");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -34,8 +44,12 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
             String namaKelas = input.readLine();
             System.out.println("Masukan kode kelas : ");
             String kodeKelas = input.readLine();
-            int id = this.kelas.get(kelas.size() - 1).getId();
-            this.kelas.add(new Kelas(id++, namaKelas, kodeKelas, this.id, this.getNama()));
+            if (database.isKelasExist(namaKelas, kodeKelas)) {
+                System.out.println("Kelas sudah ada");
+                return;
+            }
+            database.buatKelas(namaKelas, kodeKelas, this.id);
+            System.out.println("Kelas berhasil dibuat");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -52,9 +66,14 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
                 kodeKelas = input.readLine();
                 for (int i = 0; i < this.kelas.size(); i++) {
                     if (this.kelas.get(i).getNama().equals(kodeKelas)) {
-                        this.kelas.remove(i);
-                        System.out.println("Kelas berhasil dihapus");
-                        return;
+                        if (database.isKelasPengajarExist(nama, id)) {
+                            database.deleteKelas(kodeKelas, id);
+                            System.out.println("Kelas berhasil dihapus");
+                            return;
+                        } else {
+                            System.out.println("Anda bukan pengajar di kelas ini");
+                            return;
+                        }
                     }
                 }
                 System.out.println("Kelas tidak ditemukan");
@@ -87,18 +106,15 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
             if (this.kelas.isEmpty()) {
                 System.out.println("Dosen : " + this.nama + " belum memiliki kelas");
             } else {
-                System.out.println("Masukan nama kelas : ");
-                String namaKelas;
-                namaKelas = input.readLine();
                 System.out.println("Masukan kode kelas : ");
                 String kodeKelas = input.readLine();
-                for (int i = 0; i < this.kelas.size(); i++) {
-                    if (this.kelas.get(i).getNama().equals(namaKelas)) {
-                        this.kelas.get(i).setNama(namaKelas);
-                        this.kelas.get(i).setKode(kodeKelas);
-                        System.out.println("Kelas berhasil diubah");
-                        return;
-                    }
+                if (database.isKelasPengajarExist(kodeKelas, id)) {
+                    System.out.println("Masukan nama kelas : ");
+                    String namaKelas = input.readLine();
+                    database.updateKelas(namaKelas, id);
+                    System.out.println("Kelas berhasil diubah");
+                } else {
+                    System.out.println("Anda bukan pengajar di kelas ini");
                 }
                 System.out.println("Kelas tidak ditemukan");
             }
@@ -111,14 +127,15 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
     public void menu() {
         try {
             while (true) {
+                kelas = database.getDataKelas(id);
                 System.out.println("==========================");
                 System.out.println("1. Lihat Kelas");
                 System.out.println("2. Buat Kelas");
                 System.out.println("3. Hapus Kelas");
                 System.out.println("4. Ubah Kelas");
-                System.out.println("6. Join Kelas");
-                System.out.println("7. Profile");
-                System.out.println("8. Logout");
+                System.out.println("5. Join Kelas");
+                System.out.println("6. Profile");
+                System.out.println("7. Logout");
                 System.out.println("==========================");
                 System.out.println("Pilih menu: ");
                 pilihan = Integer.parseInt(input.readLine());
@@ -132,10 +149,16 @@ public class Pengajar extends Akun implements UserLevelA, UserLevelB {
                     case 3:
                         this.hapusKelas();
                         break;
-                    case 7:
-                        this.profile();
+                    case 4:
+                        this.ubahKelas();
                         break;
                     case 5:
+                        this.joinKelas();
+                        break;
+                    case 6:
+                        this.profile();
+                        break;
+                    case 7:
                         return;
                     default:
                         System.out.println("Pilihan tidak tersedia");

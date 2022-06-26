@@ -84,6 +84,57 @@ public class Database {
         return kelas;
     }
 
+    public void buatKelas(String nama, String kode, String id_pengajar) {
+        try {
+            sql = "INSERT INTO Kelas (nama,kode,id_pengajar) VALUES (?,?,?)";
+            Connection cn = getKoneksi();
+            pst = cn.prepareStatement(sql);
+            pst.setString(1, nama);
+            pst.setString(2, kode);
+            pst.setString(3, id_pengajar);
+            pst.execute();
+            pst.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+
+    public boolean isKelasExist(String nama, String kode) {
+        boolean isExist = false;
+        try {
+            sql = "SELECT * FROM Kelas WHERE nama = ? AND kode = ?";
+            Connection cn = getKoneksi();
+            pst = cn.prepareStatement(sql);
+            pst.setString(1, nama);
+            pst.setString(2, kode);
+            result = pst.executeQuery();
+            if (result.next()) {
+                isExist = true;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return isExist;
+    }
+
+    public boolean isKelasPengajarExist(String kode, String id_pengajar) {
+        boolean isExist = false;
+        try {
+            sql = "SELECT * FROM Kelas WHERE kode = ? AND id_pengajar = ?";
+            Connection cn = getKoneksi();
+            pst = cn.prepareStatement(sql);
+            pst.setString(1, kode);
+            pst.setString(2, id_pengajar);
+            result = pst.executeQuery();
+            if (result.next()) {
+                isExist = true;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return isExist;
+    }
+
     public void joinKelas(String id_user, int id_kelas) {
         try {
             sql = "INSERT INTO Kelas_Akun (id_user,id_kelas) VALUES (?,?)";
@@ -112,11 +163,13 @@ public class Database {
         }
     }
 
-    public void updateKelas(Kelas Kelas) {
+    public void updateKelas(String nama, String id_pengajar) {
         try {
             sql = "UPDATE Kelas SET nama=? WHERE id=?";
             Connection cn = getKoneksi();
             pst = cn.prepareStatement(sql);
+            pst.setString(1, nama);
+            pst.setString(2, id_pengajar);
             pst.execute();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error : " + ex);
@@ -129,15 +182,17 @@ public class Database {
         }
     }
 
-    public void deleteKelas(int id) {
+    public void deleteKelas(String id, String id_pengajar) {
         try {
-            sql = "DELETE FROM Kelas WHERE id=?";
+            sql = "DELETE FROM Kelas WHERE id = ? AND id_pengajar = ?";
             Connection cn = getKoneksi();
             pst = cn.prepareStatement(sql);
-            pst.setInt(1, id);
+            pst.setString(1, id);
+            pst.setString(2, id_pengajar);
             pst.execute();
+            pst.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, "Error : " + ex);
         }
     }
 
